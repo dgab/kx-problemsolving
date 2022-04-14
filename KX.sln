@@ -19,9 +19,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KX.StatusService", "src\Sta
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StorageService", "StorageService", "{C1AA0B82-2FB6-46D8-830F-A2AEE8416D0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KX.StorageService.iTests", "tests\KX.StorageService.iTests\KX.StorageService.iTests.csproj", "{1F293B84-6B5D-4BD3-A72E-A28B3C40E38A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KX.StorageService.iTests", "tests\KX.StorageService.iTests\KX.StorageService.iTests.csproj", "{1F293B84-6B5D-4BD3-A72E-A28B3C40E38A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KX.StorageService.uTests", "tests\KX.StorageService.uTests\KX.StorageService.uTests.csproj", "{8C1DB5EF-EC02-4E59-8606-78204BD1C34D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KX.StorageService.uTests", "tests\KX.StorageService.uTests\KX.StorageService.uTests.csproj", "{8C1DB5EF-EC02-4E59-8606-78204BD1C34D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_docs", "_docs", "{D5E6283E-F946-43F8-B122-BB2FDBC6B920}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
