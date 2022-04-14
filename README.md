@@ -90,7 +90,8 @@ Notable mentions:
 - I added a retry middleware to services, but I did not add a CircuitBreaker.
 - I did not configure TLS.
 - Since Status service is discovering services through docker daemon, adding additional replicas to the system is easy. Just modify the replica count in the used .env file.
-
+- Each request is logged through the request logging middleware in development mode.
+- Code duplication in services are thought over. Microservices share nothing. Of course this does not mean that we can not develop shared libraries with shared functionality, but in a microservice architecture shared libraries can easily become a burden, especially through transitive dependencies - so developing shared libraries requires consideration. Up until a certain point code duplication is easier than package management.
 
 A more complicated design decision: I used the pattern to route to services based on the path in the URL. There is another pattern: use subdomain for services. With the first approach if I want TLS, I don't need a wildcard certificate, however with subdomains I do. However, if the system gets to a multitenant/multi-region level, I would need wildcard certificates either way. I prefer to use routes behind the API gateway, and subdomains to distinguish between tenants/regions.
 
