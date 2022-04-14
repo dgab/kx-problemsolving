@@ -1,0 +1,57 @@
+﻿*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+nupkg/
+
+# Visual Studio
+.vs/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.sample.json
+
+# Rider
+.idea
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Environment variable files
+*.env
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Pp]ackages/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+/data
+/data/dummy
+
+/_infra/.terraform/
+/_infra/.terraform.lock.hcl
+
+appsettings.Development.json
+appsettings.Staging.json
+local.settings.json
+KubernetesLocalProcessConfig.yaml
+
+# Compliance Checker Demo
+/src/Tools/VMS.CCI.BCS.Algorithm.ComplianceChecker/data/input.zip
+/tests/E2ETests/VMS.CCI.E2ETests.TestCases/appsettings.me.json
