@@ -21,9 +21,6 @@ nupkg/
 *.userosscache
 *.sln.docstates
 
-# Environment variable files
-*.env
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
