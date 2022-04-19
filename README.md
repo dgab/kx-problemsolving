@@ -35,6 +35,8 @@ docker-compose --env-file="./.env.dev" up
 
 Note that there are two environments: .env and .env.dev. While using the development environment the user will be able to access swagger (OpenAPI documentation). Because of this I suggest to start the application in the development environment. (Since it is not a good practice to enable API documentation on production). 
 
+To build the application .Net 5 SDK is necessary.
+
 # Endpoints
 
 Each application has a swagger (only in development), where the user can try out the API's provided by a given service. Each application has a /healthz endpoint which can be used by docker daemon and traefik.
