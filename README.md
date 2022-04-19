@@ -67,7 +67,7 @@ Routes:
 API Gateway (Traefik)
 - http://kx.localhost:8081/ 
   
-Admins can see the services, middlewares, heaklthchecks, etc through the dashboard. This endpoint requires basic authentication. (User=User Password=Password). Ensure that the browser does not block the pop ups. If it's hard to solve for some reason comment out the following labels in the docker-compose file:
+Admins can see the services, middlewares, heaklthchecks, etc through the dashboard. This endpoint requires basic authentication. (User=user Password=password). Ensure that the browser does not block the pop ups. If it's hard to solve for some reason comment out the following labels in the docker-compose file:
 
 ```
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
