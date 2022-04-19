@@ -52,7 +52,7 @@ Status endpoint returns the docker container state through the usage of docker d
 
 ---
 Storage Service
-- http://kx.localhost:8081/storagesvc/data/swagger
+- http://kx.localhost:8081/storagesvc/swagger
 - http://kx.localhost:8081/storagesvc/data/{partitionkey}/{id}
 - http://kx.localhost:8081/storagesvc/healthz
 
