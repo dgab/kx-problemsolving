@@ -1,0 +1,103 @@
+version: '3.4'
+
+services:
+
+  traefik:
+    image: "traefik:v2.6"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - '--api.dashboard=true'
+      - "--api.insecure=true"
+      - '--entrypoints.web.address=:${traefik__network__port}'
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - "${traefik__network__port}:${traefik__network__port}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "app.name=${traefik__app}"
+      - "app.version=${traefik__app__version}"
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`${traefik__network__host}`)"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.service=api@internal"
+      # Enable this for basic auth user=user password=password
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=user:$$apr1$$l927e5dn$$7BzqJzd3vSl4ZJXIZsR0S0"
+
+  storageservice:
+    image: ${DOCKER_REGISTRY-}kxstorageservice
+    deploy:
+      replicas: ${storageservice__replicas}
+    build:
+      context: .
+      dockerfile: src/StorageService/KX.StorageService/Dockerfile
+    environment:
+     - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+     - SWAGGER__PATH=${storageservice__network__path}
+    healthcheck:
+      test: curl --fail http://127.0.0.1/healthz || exit 1
+      interval: 5s
+      timeout: 4s
+      retries: 2
+      start_period: 5s
+    labels:
+      - "app.name=${storageservice__app}"
+      - "app.version=${storageservice__app__version}"
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.storageservice.rule=Host(`${storageservice__network__host}`) && PathPrefix(`${storageservice__network__path}`)"
+      - "traefik.http.routers.storageservice.middlewares=storageservice-strip,storageservice-retry"
+      - "traefik.http.middlewares.storageservice-strip.stripprefix.forceSlash=true"
+      - "traefik.http.middlewares.storageservice-strip.stripprefix.prefixes=${storageservice__network__path}"
+      - "traefik.http.middlewares.storageservice-retry.retry.attempts=3"
+      - "traefik.http.middlewares.storageservice-auth.basicauth.removeheader=true"
+      # Only traefik enterprise has caching feature. With this even when all storage services are down we could answer, until the cache is invalidated.
+      #- "traefik.http.middlewares.storageservice-http-cache.plugin.httpCache.maxTtl=600" 
+      - "traefik.http.services.storageservice.loadbalancer.healthcheck.interval=5s"
+      - "traefik.http.services.storageservice.loadbalancer.healthcheck.path=/healthz"
+      - "traefik.http.services.storageservice.loadbalancer.healthcheck.port=80"
+      - "traefik.http.services.storageservice.loadbalancer.healthcheck.timeout=4s"
+    ports:
+      - "${storageservice__network__port}"
+
+
+  statusservice:
+    image: ${DOCKER_REGISTRY-}kxstatusservice
+    depends_on: 
+      [ storageservice ]
+    deploy:
+      replicas: ${statusservice__replicas}
+    build:
+      context: .
+      dockerfile: src/StatusService/KX.StatusService/Dockerfile
+    healthcheck:
+      test: curl --fail http://127.0.0.1/healthz || exit 1
+      interval: 5s
+      timeout: 4s
+      retries: 2
+      start_period: 5s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    environment:
+     - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+     - SWAGGER__PATH=${statusservice__network__path}
+    labels:
+      - "app.name=${statusservice__app}"
+      - "app.version=${statusservice__app__version}"
+      - "traefik.enable=true"
+      - "traefik.port=${statusservice__network__port}"
+      - "traefik.http.routers.statusservice.rule=Host(`${statusservice__network__host}`) && PathPrefix(`${statusservice__network__path}`)"
+      - "traefik.http.routers.statusservice.entrypoints=web"
+      - "traefik.http.routers.statusservice.middlewares=statusservice-strip,statusservice-retry"
+      - "traefik.http.middlewares.statusservice-strip.stripprefix.forceSlash=true"
+      - "traefik.http.middlewares.statusservice-strip.stripprefix.prefixes=${statusservice__network__path}"
+      - "traefik.http.middlewares.statusservice-retry.retry.attempts=3"
+      - "traefik.http.services.statusservice.loadbalancer.healthcheck.interval=5s"
+      - "traefik.http.services.statusservice.loadbalancer.healthcheck.path=/healthz"
+      - "traefik.http.services.statusservice.loadbalancer.healthcheck.port=80"
+      - "traefik.http.services.statusservice.loadbalancer.healthcheck.timeout=4s"
+    ports:
+      - "${statusservice__network__port}"
